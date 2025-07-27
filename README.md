@@ -1,17 +1,18 @@
-## Foundry
+# Blockchain CRM for Small Companies
+
+## Overview
+
+**A decentralized CRM** where authenticated users (via MetaMask) can manage company records through **on-chain CRUD operations**. Built with:
+
+- **Frontend**: React + TypeScript + ethers.js
+- **Blockchain**: Ethereum (Local/Testnet via Anvil)
+- **Smart Contracts**: Solidity (Foundry)
 
 **Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
 
-Foundry consists of:
+## Architecture
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
+<img width="553" height="175" alt="image" src="https://github.com/user-attachments/assets/2138f527-6ec0-4255-b166-c32ab47de383" />
 
 ## Usage
 
@@ -24,7 +25,7 @@ $ forge build
 ### Test
 
 ```shell
-$ forge test
+$ forge test -vvv
 ```
 
 ### Format
@@ -33,11 +34,6 @@ $ forge test
 $ forge fmt
 ```
 
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
 
 ### Anvil
 
@@ -45,22 +41,8 @@ $ forge snapshot
 $ anvil
 ```
 
-### Deploy
+### Deploy in Anvil
 
 ```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+$ forge create src/Company.sol:CompanyRegistry --rpc-url http://127.0.0.1:8545 --private-key private_key_provided_by_anvil --broadcast
 ```
