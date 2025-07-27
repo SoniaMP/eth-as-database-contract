@@ -16,6 +16,13 @@
 
 ## Usage
 
+### Clone the project
+
+```shell
+git clone [https://github.com/your-username/your-repo.git](https://github.com/SoniaMP/eth-as-database-be.git)
+cd eth-as-database-contract
+```
+
 ### Build
 
 ```shell
@@ -46,3 +53,4 @@ $ anvil
 ```shell
 $ forge create src/Company.sol:CompanyRegistry --rpc-url http://127.0.0.1:8545 --private-key private_key_provided_by_anvil --broadcast
 ```
+
