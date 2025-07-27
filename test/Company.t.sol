@@ -5,24 +5,54 @@ import {Test, console} from "forge-std/Test.sol";
 import {CompanyRegistry} from "../src/Company.sol";
 
 contract CompanyTest is Test {
-    CompanyRegistry private companyRegistry;
+    CompanyRegistry company;
+    address companyOwner = address(0xAAA);
+    address attacker = address(0xCCC);
 
     function setUp() public {
-        companyRegistry = new CompanyRegistry();
+        company = new CompanyRegistry();
     }
 
-    function testCreateCompany() public {
-        string memory companyName = "TestCompany";
-        companyRegistry.createCompany(companyName);
+    function test_CreateCompany() public {
+        company.createCompany("vat123", "TestCompany", companyOwner);
 
-        (string memory retrievedName, address owner) = companyRegistry.getCompany(0);
-        assertEq(retrievedName, companyName);
-        assertEq(owner, address(this));
+        (string memory vatNumber, string memory name, address owner) = company
+            .getCompany(0);
+
+        assertEq(vatNumber, "vat123");
+        assertEq(name, "TestCompany");
+        assertEq(owner, companyOwner);
     }
 
-    function testGetNonExistentCompany() public {
-        vm.expectRevert("Company does not exist");
-        companyRegistry.getCompany(1);
+    function test_UpdateCompany_ByCompanyOwner() public {
+        company.createCompany("vat123", "TestCompany", companyOwner);
+
+        vm.prank(companyOwner);
+        company.updateCompany(0, "UpdatedCompany");
+
+        (, string memory name, ) = company.getCompany(0);
+        assertEq(name, "UpdatedCompany");
     }
-    
+
+    function test_Revert_UpdateCompany_ByAttacker() public {
+        company.createCompany("vat123", "TestCompany", companyOwner);
+
+        vm.expectRevert(
+            "Not authorized: Only the company owner can call this function"
+        );
+        vm.prank(attacker);
+        company.updateCompany(0, "HackedCompany");
+    }
+
+    function test_DeleteCompany_ByCompanyOwner() public {
+        company.createCompany("vat123", "TestCompany", companyOwner);
+
+        vm.prank(companyOwner);
+        company.deleteCompany(0);
+
+        (, string memory name, address owner) = company.getCompany(0);
+
+        assertEq(name, "");
+        assertEq(owner, address(0));
+    }
 }
