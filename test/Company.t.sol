@@ -6,53 +6,54 @@ import {CompanyRegistry} from "../src/Company.sol";
 
 contract CompanyTest is Test {
     CompanyRegistry company;
-    address companyOwner = address(0xAAA);
-    address attacker = address(0xCCC);
+    address user1 = address(0xAAA);
 
     function setUp() public {
         company = new CompanyRegistry();
     }
 
-    function test_CreateCompany() public {
-        company.createCompany("vat123", "TestCompany", companyOwner);
+    function test_RegisterCompany() public {
+        vm.startPrank(user1);
+        company.registerCompany("B12312312");
 
-        (string memory vatNumber, string memory name, address owner) = company
-            .getCompany(0);
-
-        assertEq(vatNumber, "vat123");
-        assertEq(name, "TestCompany");
-        assertEq(owner, companyOwner);
+        string[] memory companies = company.getCompanies();
+        assertEq(companies.length, 1);
+        assertEq(companies[0], "B12312312");
     }
 
-    function test_UpdateCompany_ByCompanyOwner() public {
-        company.createCompany("vat123", "TestCompany", companyOwner);
 
-        vm.prank(companyOwner);
-        company.updateCompany(0, "UpdatedCompany");
-
-        (, string memory name, ) = company.getCompany(0);
-        assertEq(name, "UpdatedCompany");
+    function test_RevertIfNameIsEmpty() public {
+        vm.startPrank(user1);
+        vm.expectRevert("VAT number cannot be empty");
+        company.registerCompany("");
     }
 
-    function test_Revert_UpdateCompany_ByAttacker() public {
-        company.createCompany("vat123", "TestCompany", companyOwner);
-
-        vm.expectRevert(
-            "Not authorized: Only the company owner can call this function"
-        );
-        vm.prank(attacker);
-        company.updateCompany(0, "HackedCompany");
+    function test_GetEmptyNameForUnregisteredAddress() public {
+        vm.prank(user1);
+        string[] memory companies = company.getCompanies();
+        assertEq(companies.length, 0);
     }
 
-    function test_DeleteCompany_ByCompanyOwner() public {
-        company.createCompany("vat123", "TestCompany", companyOwner);
+    function test_EmitEventOnRegister() public {
+        vm.expectEmit(true, false, false, true);
+        emit CompanyRegistry.CompanyRegistered(user1, "B12312312");
 
-        vm.prank(companyOwner);
-        company.deleteCompany(0);
+        vm.prank(user1);
+        company.registerCompany("B12312312");
+    }
 
-        (, string memory name, address owner) = company.getCompany(0);
+    function test_GetCompanyByOwner() public {
+        vm.startPrank(user1);
+        company.registerCompany("B12312312");
 
-        assertEq(name, "");
-        assertEq(owner, address(0));
+        string[] memory companies = company.getCompanies();
+        assertEq(companies.length, 1);
+        assertEq(companies[0], "B12312312");
+    }
+
+    function test_GetEmptyCompanies() public {
+        vm.startPrank(user1);
+        string[] memory companies = company.getCompanies();
+        assertEq(companies.length, 0);
     }
 }
