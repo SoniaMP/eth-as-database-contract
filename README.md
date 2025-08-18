@@ -41,7 +41,6 @@ $ forge test -vvv
 $ forge fmt
 ```
 
-
 ### Anvil
 
 ```shell
@@ -51,6 +50,5 @@ $ anvil
 ### Deploy in Anvil
 
 ```shell
-$ forge create src/Company.sol:CompanyRegistry --rpc-url http://127.0.0.1:8545 --private-key private_key_provided_by_anvil --broadcast
+$ forge create src/Company.sol:Company --rpc-url http://127.0.0.1:8545 --private-key private_key_provided_by_anvil --broadcast
 ```
-

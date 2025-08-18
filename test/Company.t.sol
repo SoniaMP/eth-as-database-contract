@@ -2,14 +2,14 @@
 pragma solidity ^0.8.13;
 
 import {Test, console} from "forge-std/Test.sol";
-import {CompanyRegistry} from "../src/Company.sol";
+import {Company} from "../src/Company.sol";
 
 contract CompanyTest is Test {
-    CompanyRegistry company;
+    Company company;
     address user1 = address(0xAAA);
 
     function setUp() public {
-        company = new CompanyRegistry();
+        company = new Company();
     }
 
     function test_RegisterCompany() public {
@@ -36,7 +36,7 @@ contract CompanyTest is Test {
 
     function test_EmitEventOnRegister() public {
         vm.expectEmit(true, false, false, true);
-        emit CompanyRegistry.CompanyRegistered(user1, "B12312312");
+        emit Company.CompanyRegistered(user1, "B12312312");
 
         vm.prank(user1);
         company.registerCompany("B12312312");

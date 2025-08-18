@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-contract CompanyRegistry {
+contract Company {
     mapping(address => string[]) private companies;
 
     event CompanyRegistered(address indexed owner, string vatNumber);
