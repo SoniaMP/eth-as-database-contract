@@ -11,7 +11,9 @@ contract Company {
 
         string[] storage vatNumbers = companies[msg.sender];
         for (uint i = 0; i < vatNumbers.length; i++) {
-            if (keccak256(bytes(vatNumbers[i])) == keccak256(bytes(_vatNumber))) {
+            if (
+                keccak256(bytes(vatNumbers[i])) == keccak256(bytes(_vatNumber))
+            ) {
                 revert("Company VAT number already registered");
             }
         }
@@ -20,8 +22,10 @@ contract Company {
         emit CompanyRegistered(msg.sender, _vatNumber);
     }
 
-
     function getCompanies() public view returns (string[] memory) {
-        return companies[msg.sender].length > 0 ? companies[msg.sender] : new string[](0);
+        return
+            companies[msg.sender].length > 0
+                ? companies[msg.sender]
+                : new string[](0);
     }
 }

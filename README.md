@@ -35,12 +35,6 @@ $ forge build
 $ forge test -vvv
 ```
 
-### Format
-
-```shell
-$ forge fmt
-```
-
 ### Anvil
 
 ```shell
@@ -51,4 +45,12 @@ $ anvil
 
 ```shell
 $ forge create src/Company.sol:Company --rpc-url http://127.0.0.1:8545 --private-key private_key_provided_by_anvil --broadcast
+```
+
+### Deploy all contracts
+
+This command will deploy all contracts and will give the developer all contract addresses. The user will be asked to insert a valid private key, provided in `anvil`.
+
+```shell
+$ ./script/deploy.sh
 ```
